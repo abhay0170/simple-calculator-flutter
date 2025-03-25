@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:simple_calculator/widgets/buttons.dart';
 
@@ -40,18 +41,33 @@ class HomePage extends HookWidget {
         children: [
           Expanded(
             child: Container(
-              margin: EdgeInsets.all(20),
+              margin: EdgeInsets.all(10),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Expanded(child: SizedBox()),
                   Container(
-                    alignment: Alignment.topLeft,
-                    child: Text(userQuestion.value),
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      userQuestion.value,
+                      style: GoogleFonts.agdasima(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
                   Container(
                     alignment: Alignment.bottomRight,
-                    child: Text(userAnswer.value),
+                    child: Text(
+                      userAnswer.value,
+                      style: GoogleFonts.agdasima(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 45,
+                      ),
+                    ),
                   ),
+                  SizedBox(height: 30),
                 ],
               ),
             ),
@@ -73,7 +89,7 @@ class HomePage extends HookWidget {
                         userQuestion.value = "";
                       },
                       buttonText: buttons[index],
-                      color: Colors.greenAccent,
+                      color: Colors.greenAccent.shade200,
                       textColor: Colors.black,
                     );
                   }
@@ -87,6 +103,17 @@ class HomePage extends HookWidget {
                         );
                       },
                       buttonText: buttons[index],
+                      color: Colors.greenAccent.shade200,
+                      textColor: Colors.black,
+                    );
+                  }
+                  // answer button
+                  else if (buttons[index] == "ANS") {
+                    return MyButtons(
+                      buttonTap: () {
+                        userQuestion.value = "";
+                      },
+                      buttonText: buttons[index],
                       color: Colors.redAccent,
                       textColor: Colors.black,
                     );
@@ -96,7 +123,9 @@ class HomePage extends HookWidget {
                     return MyButtons(
                       buttonTap: () {
                         ExpressionParser p = GrammarParser();
-                        Expression exp = p.parse(userQuestion.value);
+                        Expression exp = p.parse(
+                          userQuestion.value.replaceAll("x", "*"),
+                        );
                         ContextModel cm = ContextModel();
 
                         // Evaluate expression:
@@ -104,7 +133,7 @@ class HomePage extends HookWidget {
                         userAnswer.value = eval.toString();
                       },
                       buttonText: buttons[index],
-                      color: Colors.redAccent,
+                      color: Colors.orangeAccent.shade400,
                       textColor: Colors.black,
                     );
                   }
@@ -117,12 +146,9 @@ class HomePage extends HookWidget {
                       buttonText: buttons[index],
                       color:
                           isOperator(buttons[index])
-                              ? Colors.deepPurple
+                              ? Colors.orangeAccent.shade400
                               : Colors.white,
-                      textColor:
-                          isOperator(buttons[index])
-                              ? Colors.white
-                              : Colors.black,
+                      textColor: Colors.black,
                     );
                   }
                 },
@@ -135,7 +161,7 @@ class HomePage extends HookWidget {
   }
 
   bool isOperator(String x) {
-    if (x == "%" || x == "/" || x == "x" || x == "-" || x == "+" || x == "=") {
+    if (x == "%" || x == "/" || x == "x" || x == "-" || x == "+") {
       return true;
     } else {
       return false;
